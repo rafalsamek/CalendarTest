@@ -70,11 +70,13 @@ class Calendar implements CalendarInterface
     private function addDayToCalendar(&$calendar, DateTime $day)
     {
         $weekNumber = $day->format('W');
-        $currentWeekNumber = $this->datetime->format('W');
+        $previousWeekDay = clone $this->datetime;
+        $previousWeekDay->sub(new DateInterval('P7D'));
+        $previousWeekNumber = $previousWeekDay->format('W');
         if(!array_key_exists($weekNumber, $calendar)) {
             $calendar[$weekNumber] = array();
         }
-        $calendar[$weekNumber][$day->format('d')] = $weekNumber == $currentWeekNumber - 1;
+        $calendar[$weekNumber][$day->format('j')] = $weekNumber == $previousWeekNumber;
     }
 
     private function getFirstDayOfCalendar()
