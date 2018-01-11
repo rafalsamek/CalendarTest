@@ -69,10 +69,10 @@ class Calendar implements CalendarInterface
 
     private function addDayToCalendar(&$calendar, DateTime $day)
     {
-        $weekNumber = $day->format('W');
+        $weekNumber = (int) $day->format('W');
         $previousWeekDay = clone $this->datetime;
         $previousWeekDay->sub(new DateInterval('P7D'));
-        $previousWeekNumber = $previousWeekDay->format('W');
+        $previousWeekNumber = (int) $previousWeekDay->format('W');
         if(!array_key_exists($weekNumber, $calendar)) {
             $calendar[$weekNumber] = array();
         }
