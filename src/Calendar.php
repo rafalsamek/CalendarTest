@@ -11,6 +11,7 @@ namespace Calendar;
 
 use DateTimeInterface;
 use DateTime;
+use DateInterval;
 
 class Calendar implements CalendarInterface
 {
@@ -58,7 +59,7 @@ class Calendar implements CalendarInterface
     public function getCalendar()
     {
         $calendar = array();
-        $day = $this->getFirstDayOfCalendar();
+        $day = $this->getLastDayOfCalendar();
         while($day <= $this->getLastDayOfCalendar()) {
             $this->addDayToCalendar($calendar, $day);
             $day->add(new DateInterval('P1D'));
@@ -73,11 +74,24 @@ class Calendar implements CalendarInterface
 
     private function getFirstDayOfCalendar()
     {
-
+        $day = new DateTime(date("Y-m-01", $this->datetime->getTimestamp()));
+        $firstWeekDay = $this->getFirstWeekDay();
+        if($firstWeekDay > 1) {
+            $diff = 'P' . ($firstWeekDay - 1) . 'D';
+            $day->sub(new DateInterval($diff));
+        }
+        return $day;
     }
 
     private function getLastDayOfCalendar()
     {
-
+        $numberOfDaysInThisMonth = $this->getNumberOfDaysInThisMonth();
+        $day = new DateTime(date("Y-m-$numberOfDaysInThisMonth 23:59:59", $this->datetime->getTimestamp()));
+        $lastDayNumber = $day->format('w');
+        if($lastDayNumber > 0) {
+            $diff = 'P' . (7 - $lastDayNumber) . 'D';
+            $day->add(new DateInterval($diff));
+        }
+        return $day;
     }
 }
