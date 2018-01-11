@@ -74,7 +74,7 @@ class Calendar implements CalendarInterface
         if(!array_key_exists($weekNumber, $calendar)) {
             $calendar[$weekNumber] = array();
         }
-        $calendar[$weekNumber][$day->format('d')] = $weekNumber == $currentWeekNumber;
+        $calendar[$weekNumber][$day->format('d')] = $weekNumber == $currentWeekNumber - 1;
     }
 
     private function getFirstDayOfCalendar()
