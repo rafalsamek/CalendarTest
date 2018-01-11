@@ -59,7 +59,7 @@ class Calendar implements CalendarInterface
     public function getCalendar()
     {
         $calendar = array();
-        $day = $this->getLastDayOfCalendar();
+        $day = $this->getFirstDayOfCalendar();
         while($day <= $this->getLastDayOfCalendar()) {
             $this->addDayToCalendar($calendar, $day);
             $day->add(new DateInterval('P1D'));
@@ -69,7 +69,12 @@ class Calendar implements CalendarInterface
 
     private function addDayToCalendar(&$calendar, DateTime $day)
     {
-
+        $weekNumber = $day->format('W');
+        $currentWeekNumber = $this->datetime->format('W');
+        if(!array_key_exists($weekNumber, $calendar)) {
+            $calendar[$weekNumber] = array();
+        }
+        $calendar[$weekNumber][$day->format('d')] = $weekNumber == $currentWeekNumber;
     }
 
     private function getFirstDayOfCalendar()
